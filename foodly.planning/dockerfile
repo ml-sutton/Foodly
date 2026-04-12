@@ -1,0 +1,15 @@
+
+
+# BUILDER STAGE
+FROM golang:1.26.1-alpine AS builder
+WORKDIR /app
+COPY /go.mod ./
+RUN go mod download && go mod verify
+COPY . .
+RUN CGO_ENABLED=0 go build -a -installsuffix cgo -ldflags='-s -w -extldflags "-static"' -trimpath -o main ./cmd/server/main.go
+
+
+# PRODUCTION STAGE
+FROM gcr.io/distroless/static-debian13:latest as production 
+COPY --from=builder /app/main .
+CMD ["./main"]

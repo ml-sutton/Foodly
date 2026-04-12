@@ -1,0 +1,17 @@
+services:
+  preferences:
+    build:
+      context: ./foodly.preferences
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      - PORT=8080
+  planning:
+    build:
+      context: ./foodly.planning
+      dockerfile: Dockerfile
+    ports:
+      - 8081:8081
+    environment:
+      - PORT=8081
